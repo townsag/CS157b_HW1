@@ -3,6 +3,14 @@ package src;
 import java.sql.*;
 
 class Test {
+
+    /*
+     * Format for how this will be called:
+     *  - java RecordMeasurer dbms db table_name type num_rows num_columns index_no_index
+     *                     args[0]  1  args[2]    args[3]       args[4]     args[5]
+     * Example call:
+     *  - java RecordMeasurer sqlite "test.sqlite" FOO "VARCHAR(39)" 10000 20 false
+     */
     public static void main(String[] args){
         Connection connection = null;
         try {
@@ -34,3 +42,5 @@ class Test {
 
     }
 }
+
+
