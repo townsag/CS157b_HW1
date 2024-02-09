@@ -5,10 +5,14 @@ import java.sql.*;
 public class MySQLDatabase extends Database{
     private Connection connection = null;
 
-    public boolean connectToDbms(String db_name){
+    public MySQLDatabase(String db_name) {
+        this.connectToDbms(db_name);
+    }
+
+    public boolean connectToDbms(String db_name) {
         String url = "jdbc:mysql://localhost:3306/" + db_name;
         String username = "root";
-        String password = "yourPassword";
+        String password = "LTAndr3w";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(url, username, password);
@@ -22,16 +26,30 @@ public class MySQLDatabase extends Database{
         return connection == null;
     }
 
-    public void populateDB(String table_name, String type, int num_rows, int num_columns, boolean make_index){
+    public void populateDB(String table_name, String type, int num_rows, int num_columns, boolean make_index) {
         if (this.connection == null) {
             System.out.print("MySQL connection is null");
             return;
         }
         try {
+            // ToDo: check that the table does not already exist and drop the table if it does
             Statement statement = this.connection.createStatement();
+            StringBuffer createTableSB = new StringBuffer();
+            createTableSB.append("CREATE TABLE " + table_name + " (");
+            for (int i = 0; i < (num_columns - 1); i++) {
+                createTableSB.append("column" + String.valueOf(i) + " " + type + ", ");
+            }
+            createTableSB.append("column" + String.valueOf(num_columns - 1) + " " + type + ")");
+            System.out.println("this is the create table statement: ");
+            System.out.println(createTableSB.toString());
+            statement.executeUpdate(createTableSB.toString());
             
+
+
+            statement.close();
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("encountered exception in MySQLDatabase.populateDB");
+            System.out.println(e);
         }
     }
 }
