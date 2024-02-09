@@ -32,8 +32,16 @@ public class MySQLDatabase extends Database{
             return;
         }
         try {
-            // ToDo: check that the table does not already exist and drop the table if it does
             Statement statement = this.connection.createStatement();
+            // check that the table does not already exist and drop the table if it does
+            String query = "SELECT * FROM information_schema.tables WHERE table_name = '" + table_name + "'";
+            ResultSet results = statement.executeQuery(query);
+            if (results.next()){
+                String dropStatement = "DROP TABLE " + table_name;
+                statement.executeUpdate(dropStatement);
+            }
+
+            // add the new table
             StringBuffer createTableSB = new StringBuffer();
             createTableSB.append("CREATE TABLE " + table_name + " (");
             for (int i = 0; i < (num_columns - 1); i++) {
@@ -44,6 +52,7 @@ public class MySQLDatabase extends Database{
             System.out.println(createTableSB.toString());
             statement.executeUpdate(createTableSB.toString());
             
+            // ToDo: populate the new table with rows
 
 
             statement.close();
