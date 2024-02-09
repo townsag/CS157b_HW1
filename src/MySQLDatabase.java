@@ -63,7 +63,7 @@ public class MySQLDatabase {
                 statement.executeUpdate("CREATE UNIQUE INDEX unique ON " + table_name + " (column0);");     //creates a index called unique for the first column
             }
 
-            //need to differentiate between VARCHAR, INTEGER, and FLOAT for row insertion of random data next
+            //need to differentiate between VARCHAR, INTEGER, and FLOAT for row insertion of random data next, something along those lines
 
 
             statement.close();
