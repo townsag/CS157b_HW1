@@ -25,7 +25,7 @@ class Test {
         System.out.println("index: " + args[6]);
 
 
-        Database db = new MySQLDatabase(args[1]);
+        MySQLDatabase db = new MySQLDatabase(args[0], args[1]);
         db.populateDB(args[2], args[3], Integer.parseInt(args[4]), Integer.parseInt(args[5]), false);
     }
 }

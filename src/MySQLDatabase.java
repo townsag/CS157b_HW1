@@ -2,27 +2,41 @@ package src;
 
 import java.sql.*;
 
-public class MySQLDatabase extends Database{
+public class MySQLDatabase {
     private Connection connection = null;
 
-    public MySQLDatabase(String db_name) {
-        this.connectToDbms(db_name);
+    public MySQLDatabase(String dbms, String db_name) {
+        this.connectToDbms(dbms, db_name);
     }
 
-    public boolean connectToDbms(String db_name) {
-        String url = "jdbc:mysql://localhost:3306/" + db_name;
-        String username = "root";
-        String password = "LTAndr3w";
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(url, username, password);
-        } catch (Exception e){
-            System.out.println("encountered an error connecting to MySQL server at");
-            System.out.println("url: " + url);
-            System.out.println("user: " + username);
-            System.out.println("password: " + password);
-            System.out.println(e);
+    public boolean connectToDbms(String dbms, String db_name) {
+        if(dbms.equals("mysql")){
+            String url = "jdbc:mysql://localhost:3306/" + db_name;
+            String username = "root";
+            String password = "LTAndr3w";
+            try{
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                this.connection = DriverManager.getConnection(url, username, password);
+            } catch (Exception e){
+                System.out.println("encountered an error connecting to MySQL server at");
+                System.out.println("url: " + url);
+                System.out.println("user: " + username);
+                System.out.println("password: " + password);
+                System.out.println(e);
+            }
         }
+        else{
+            String url = "jdbc:sqlite:" + db_name;
+            try{
+                Class.forName("org.sqlite.JDBC");
+                this.connection = DriverManager.getConnection(url);
+            } catch (Exception e){
+                System.out.println("encountered an error connecting to sqlite file at");
+                System.out.println("url: " + url);
+                System.out.println(e);
+            }
+        }
+
         return connection == null;
     }
 
@@ -34,6 +48,7 @@ public class MySQLDatabase extends Database{
         try {
             // ToDo: check that the table does not already exist and drop the table if it does
             Statement statement = this.connection.createStatement();
+            statement.executeUpdate("DROP TABLE IF EXISTS " + table_name + ";");
             StringBuffer createTableSB = new StringBuffer();
             createTableSB.append("CREATE TABLE " + table_name + " (");
             for (int i = 0; i < (num_columns - 1); i++) {
@@ -43,7 +58,12 @@ public class MySQLDatabase extends Database{
             System.out.println("this is the create table statement: ");
             System.out.println(createTableSB.toString());
             statement.executeUpdate(createTableSB.toString());
-            
+
+            if (make_index == true) {
+                statement.executeUpdate("CREATE UNIQUE INDEX unique ON " + table_name + " (column0);");     //creates a index called unique for the first column
+            }
+
+            //need to differentiate between VARCHAR, INTEGER, and FLOAT for row insertion of random data next
 
 
             statement.close();
