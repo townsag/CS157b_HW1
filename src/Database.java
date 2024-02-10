@@ -6,8 +6,12 @@ import java.util.Random;
 public class Database{
     private Connection connection = null;
     private String dbName;
-
     private String dbms;
+    private String mysql_user = "root";
+    private String mysql_password = "LTAndr3w";
+    private String mysql_url = "jdbc:mysql://localhost:3306/";
+    private String sqlite_url = "jdbc:sqlite:";
+
 
     public Database(String dbms, String db_name) {
         this.dbName = db_name;
@@ -17,22 +21,20 @@ public class Database{
 
     public boolean connectToDbms(String dbms, String db_name) {
         if(dbms.equalsIgnoreCase("mysql")){
-            String url = "jdbc:mysql://localhost:3306/" + db_name;
-            String username = "root";
-            String password = "LTAndr3w";
+            String url = mysql_url + db_name;
             try{
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 this.connection = DriverManager.getConnection(url, username, password);
             } catch (Exception e){
                 System.out.println("encountered an error connecting to MySQL server at");
                 System.out.println("url: " + url);
-                System.out.println("user: " + username);
-                System.out.println("password: " + password);
+                System.out.println("user: " + mysql_user);
+                System.out.println("password: " + mysql_password);
                 System.out.println(e);
             }
         }
         else{
-            String url = "jdbc:sqlite:" + db_name;
+            String url = sqlite_url + db_name;
             try{
                 Class.forName("org.sqlite.JDBC");
                 this.connection = DriverManager.getConnection(url);
