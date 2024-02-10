@@ -7,25 +7,42 @@ public class MySQLDatabase extends Database{
     private Connection connection = null;
     private String dbName;
 
-    public MySQLDatabase(String db_name) {
+    private String dbms;
+
+    public MySQLDatabase(String dbms, String db_name) {
         this.dbName = db_name;
-        this.connectToDbms(db_name);
+        this.dbms = dbms;
+        this.connectToDbms(dbms, db_name);
     }
 
-    public boolean connectToDbms(String db_name) {
-        String url = "jdbc:mysql://localhost:3306/" + db_name;
-        String username = "root";
-        String password = "yourPassowrd";
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(url, username, password);
-        } catch (Exception e){
-            System.out.println("encountered an error connecting to MySQL server at");
-            System.out.println("url: " + url);
-            System.out.println("user: " + username);
-            System.out.println("password: " + password);
-            System.out.println(e);
+    public boolean connectToDbms(String dbms, String db_name) {
+        if(dbms.equalsIgnoreCase("mysql")){
+            String url = "jdbc:mysql://localhost:3306/" + db_name;
+            String username = "root";
+            String password = "LTAndr3w";
+            try{
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                this.connection = DriverManager.getConnection(url, username, password);
+            } catch (Exception e){
+                System.out.println("encountered an error connecting to MySQL server at");
+                System.out.println("url: " + url);
+                System.out.println("user: " + username);
+                System.out.println("password: " + password);
+                System.out.println(e);
+            }
         }
+        else{
+            String url = "jdbc:sqlite:" + db_name;
+            try{
+                Class.forName("org.sqlite.JDBC");
+                this.connection = DriverManager.getConnection(url);
+            } catch (Exception e){
+                System.out.println("encountered an error connecting to sqlite file at");
+                System.out.println("url: " + url);
+                System.out.println(e);
+            }
+        }
+
         return connection == null;
     }
 
@@ -37,14 +54,17 @@ public class MySQLDatabase extends Database{
         try {
             Statement statement = this.connection.createStatement();
             // check that the table does not already exist and drop the table if it does
-            String query = "SELECT * FROM information_schema.tables WHERE table_name = '" + 
-                            table_name + "' AND table_schema = '" + this.dbName + "'";
-            ResultSet results = statement.executeQuery(query);
-            if (results.next()){
-                // System.out.println("dropping existing table");
-                String dropStatement = "DROP TABLE " + table_name;
-                statement.executeUpdate(dropStatement);
-            }
+
+            statement.executeUpdate("DROP TABLE IF EXISTS " + table_name + ";");
+
+//            String query = "SELECT * FROM information_schema.tables WHERE table_name = '" +
+//                            table_name + "' AND table_schema = '" + this.dbName + "'";
+//            ResultSet results = statement.executeQuery(query);
+//            if (results.next()){
+//                // System.out.println("dropping existing table");
+//                String dropStatement = "DROP TABLE " + table_name;
+//                statement.executeUpdate(dropStatement);
+//            }
 
             // add the new table
             StringBuffer createTableSB = new StringBuffer();
@@ -72,6 +92,10 @@ public class MySQLDatabase extends Database{
             insertSB.append("?)");
             // System.out.println("this is the insert statement");
             // System.out.println(insertSB.toString());
+
+            if (make_index == true) {
+                statement.executeUpdate("CREATE UNIQUE INDEX unique ON " + table_name + " (column0);");     //creates a index called unique for the first column
+            }
 
             // build the batch using a prepared statement
             this.connection.setAutoCommit(false);   // I think this makes it so that all of out data is committed
@@ -103,5 +127,14 @@ public class MySQLDatabase extends Database{
             System.out.println("encountered exception in MySQLDatabase.populateDB");
             System.out.println(e);
         }
+    }
+
+    public String getRandomString(int length) {
+        StringBuffer temp = new StringBuffer();
+        Random rand = new Random();
+        for (int i = 0; i < length; i++){
+            temp.append(String.valueOf(rand.nextInt(2)));
+        }
+        return temp.toString();
     }
 }
