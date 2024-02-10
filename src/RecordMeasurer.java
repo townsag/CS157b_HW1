@@ -1,6 +1,6 @@
 package src;
 
-class Test {
+class RecordMeasurer {
 
     /*
      * Format for how this will be called:
@@ -25,7 +25,7 @@ class Test {
         System.out.println("index: " + args[6]);
 
 
-        MySQLDatabase db = new MySQLDatabase(args[0], args[1]);
+        Database db = new Database(args[0], args[1]);
         db.populateDB(args[2], args[3], Integer.parseInt(args[4]), Integer.parseInt(args[5]), false);
     }
 }

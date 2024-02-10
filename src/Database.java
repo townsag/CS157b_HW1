@@ -3,13 +3,13 @@ package src;
 import java.sql.*;
 import java.util.Random;
 
-public class MySQLDatabase extends Database{
+public class Database{
     private Connection connection = null;
     private String dbName;
 
     private String dbms;
 
-    public MySQLDatabase(String dbms, String db_name) {
+    public Database(String dbms, String db_name) {
         this.dbName = db_name;
         this.dbms = dbms;
         this.connectToDbms(dbms, db_name);
