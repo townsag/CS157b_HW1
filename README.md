@@ -6,8 +6,8 @@ https://search.maven.org/remotecontent?filepath=org/slf4j/slf4j-api/1.7.36/slf4j
 
 
 There are a few global variable set at the top of the Database class to change for personal use:
-    mysql_url
-    mysql_user       
+    mysql_url,
+    mysql_user, &       
     mysql_pass                       
     
 mysql_url is currently set to the standard jdbc path: jdbc:mysql://localhost:3306/. However, it is set as a variable at the top in case you want to use your own port number.
