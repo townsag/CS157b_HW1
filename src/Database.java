@@ -48,7 +48,7 @@ public class Database{
 
     public void populateDB(String table_name, String type, int num_rows, int num_columns, boolean make_index) {
         if (this.connection == null) {
-            System.out.print("MySQL connection is null");
+            System.out.print("db connection is null");
             return;
         }
         try {
@@ -56,15 +56,6 @@ public class Database{
             // check that the table does not already exist and drop the table if it does
 
             statement.executeUpdate("DROP TABLE IF EXISTS " + table_name + ";");
-
-//            String query = "SELECT * FROM information_schema.tables WHERE table_name = '" +
-//                            table_name + "' AND table_schema = '" + this.dbName + "'";
-//            ResultSet results = statement.executeQuery(query);
-//            if (results.next()){
-//                // System.out.println("dropping existing table");
-//                String dropStatement = "DROP TABLE " + table_name;
-//                statement.executeUpdate(dropStatement);
-//            }
 
             // add the new table
             StringBuffer createTableSB = new StringBuffer();
