@@ -84,8 +84,10 @@ public class Database{
             // System.out.println("this is the insert statement");
             // System.out.println(insertSB.toString());
 
-            if (make_index == true) {
-                statement.executeUpdate("CREATE UNIQUE INDEX unique ON " + table_name + " (column0);");     //creates a index called unique for the first column
+            if (make_index) {
+                System.out.println("adding index on first column");
+                System.out.print("CREATE INDEX column0Idx ON " + table_name + " (column0)");
+                statement.executeUpdate("CREATE INDEX column0Idx ON " + table_name + " (column0)");     //creates a index called unique for the first column
             }
 
             // build the batch using a prepared statement

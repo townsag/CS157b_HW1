@@ -1,6 +1,6 @@
 unzip the mysql connector files here (HW1/lib)
 
-download these two jar files and put them here:
+download these two jar files and put them here (HW1/lib):
 https://github.com/xerial/sqlite-jdbc?tab=readme-ov-file#download
 https://search.maven.org/remotecontent?filepath=org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar
 
@@ -8,3 +8,21 @@ I was able to compile and run the project from the
 CS157a_HW1/ dirrectory using these commands:
 javac -classpath lib/mysql-connector-j-8.3.0.jar:lib/sqlite-jdbc-3.45.1.0.jar:lib/slf4j-api-1.7.36.jar:. src/RecordMeasurer.java
 java -classpath lib/mysql-connector-j-8.3.0.jar:lib/sqlite-jdbc-3.45.1.0.jar:lib/slf4j-api-1.7.36.jar:. src.RecordMeasurer sqlite "test.db" table2 'VARCHAR(11)' 3 6 true
+
+.
+├── lib
+│   ├── mysql-connector-j-8.3.0.jar
+│   ├── note.txt
+│   ├── slf4j-api-1.7.36.jar
+│   └── sqlite-jdbc-3.45.1.0.jar
+├── src
+│   ├── Database.class
+│   ├── Database.java
+│   ├── RecordMeasurer.class
+│   └── RecordMeasurer.java
+└── test.db
+
+
+select * from INFORMATION_SCHEMA.INNODB_TABLESPACES where name='book_shop/table2';
+select * from information_schema.tables where table_name='table2';
+desc table2;

@@ -26,7 +26,7 @@ class RecordMeasurer {
 
 
         Database db = new Database(args[0], args[1]);
-        db.populateDB(args[2], args[3], Integer.parseInt(args[4]), Integer.parseInt(args[5]), false);
+        db.populateDB(args[2], args[3], Integer.parseInt(args[4]), Integer.parseInt(args[5]), Boolean.parseBoolean(args[6]));
     }
 }
 
