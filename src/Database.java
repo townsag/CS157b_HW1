@@ -19,7 +19,7 @@ public class Database{
         if(dbms.equalsIgnoreCase("mysql")){
             String url = "jdbc:mysql://localhost:3306/" + db_name;
             String username = "root";
-            String password = "LTAndr3w";
+            String password = "yourPassword";
             try{
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 this.connection = DriverManager.getConnection(url, username, password);
